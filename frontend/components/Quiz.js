@@ -1,12 +1,14 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux';
-import {fetchQuiz} from '../state/action-creators';
+import {fetchQuiz, postAnswer, selectAnswer} from '../state/action-creators';
 
  const Quiz = (props) => {
-  // useEffect(() => {
-  //   fetchQuiz()
-  // });
-  console.log("1", props.quiz)
+
+  if(props.quiz === null) {
+    props.fetchQuiz()
+  }
+  
+  
   return (
     <div id="wrapper" >
       {
@@ -18,31 +20,32 @@ import {fetchQuiz} from '../state/action-creators';
             <div id="quizAnswers">
               <div className="answer selected">
                 {props.quiz.quiz.answers[0].text}
-                <button>
-                  SELECTED
+                <button onClick={() => store.dispatch(selectAnswer(props.quiz.quiz.answers[0]))}>
+                  Select
                 </button>
               </div>
 
               <div className="answer">
                 {props.quiz.quiz.answers[1].text}
-                <button>
+                <button onClick={() => selectAnswer(props.quiz.quiz.answers[1])}>
                   Select
-                </button>
+                </button >
               </div>
             </div>
 
             <button id="submitAnswerBtn" onClick={props.fetchQuiz}>Submit answer</button>
           </>
-        ) : props.fetchQuiz `${props.message}`
+        ) : 'Loading next quiz...'
       }
     </div>
   )
 }
 
 const mapStateToProps = state => {
-  console.log("2", state.message)
+  console.log("2", state.infoMessage.message)
   return {
     quiz: state.quiz,
+    selectedAnswer: state.selectedAnswer,
     message: state.message
   }
 }
