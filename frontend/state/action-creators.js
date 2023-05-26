@@ -12,9 +12,9 @@ return ({
   payload: newWheel
 }) }
 
-export const selectAnswer = selectedAnswer => (console.log(selectedAnswer), {type: SET_SELECTED_ANSWER, payload: selectedAnswer})
+export const selectAnswer = selectedAnswer => {return({type:SET_SELECTED_ANSWER, payload:selectedAnswer})}
 
-export const setMessage = message => (console.log("4", message), { type: SET_INFO_MESSAGE, payload: message })
+export const setMessage = message =>  ({ type: SET_INFO_MESSAGE, payload: message })
 
 export const setQuiz = quiz => ({type: SET_QUIZ_INTO_STATE, payload: quiz })
 
@@ -25,9 +25,10 @@ export function resetForm() { }
 // ❗ Async action creators
 export function fetchQuiz() {
   return function (dispatch) {
-    dispatch(setMessage('Loading next quiz...'))
+   
     axios.get('http://localhost:9000/api/quiz/next')
     .then(res => {
+      dispatch(setQuiz(null))
       dispatch(setQuiz(res.data))
     })
     .catch(console.log("error"))
@@ -39,19 +40,24 @@ export function fetchQuiz() {
 }
 export function postAnswer(quiz_id, selectedAnswer) {
   return function (dispatch) {
+    
     let data = {
       quiz_id: quiz_id, 
       answer_id: selectedAnswer.answer_id 
     }
-
-    axios.post('http://localhost:9000/api/quiz/answer', data, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(res => {
+    console.log("post",data)
+    dispatch(fetchQuiz())
+    // axios.post('http://localhost:9000/api/quiz/answer', data, {
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+    // .then(res => {
+    //   console.log(res)
+    //  dispatch(selectAnswer(null))
+    //  dispatch(setQuiz(null))
      
-    })
+    // })
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state

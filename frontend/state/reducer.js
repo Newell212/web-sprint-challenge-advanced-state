@@ -23,7 +23,6 @@ function wheel(state = initialWheelState, action) {
 
 const initialQuizState = null
 function quiz(state = initialQuizState, action) {
-  console.log("quiz reducer")
   switch(action.type) {
     case SET_QUIZ_INTO_STATE:
       return {...state, quiz: action.payload}
@@ -33,14 +32,13 @@ function quiz(state = initialQuizState, action) {
 
 const initialSelectedAnswerState = null
 function selectedAnswer(state = initialSelectedAnswerState, action) {
-  console.log("HERE")
-
   switch(action.type) {
     case SET_SELECTED_ANSWER:
-      console.log(action.payload)
       return {...state, selectedAnswer: action.payload}
+      default:
+        return state
   }
-  return state
+  
 }
 
 const initialMessageState = ''
