@@ -11,41 +11,29 @@ import {fetchQuiz, postAnswer, selectAnswer, setMessage} from '../state/action-c
   const [disable, setDisable] = useState(true)
 
   
-
-  
-  
   const addAnswer = (ansId) => {
     selectAnswer(ansId);
     setDisable(false)
+    
      if(ansId === props.quiz.quiz.answers[0].answer_id) {
       setSelectedOne("SELECTED")
       setSelectedTwo('Select')
       setClassOne('answer selected')
       setClassTwo('answer')
-      setMessage('Nice job! That was the correct answer')
-      
     } else {
       setSelectedOne('Select')
       setSelectedTwo('SELECTED')
       setClassOne('answer')
       setClassTwo('answer selected')
-      setMessage('What a shame! That was the incorrect answer')
-     
     }
   }
 
-  
-
-
-
   const onSubmit = () => {
-    console.log("ans",selectedAnswer)
     postAnswer(props.quiz.quiz.quiz_id, selectedAnswer)
     setSelectedOne('Select')
     setSelectedTwo('Select')
     setClassOne('answer')
     setClassTwo('answer')
-    setMessage('')
     setDisable(true)
   }
 
@@ -87,7 +75,6 @@ import {fetchQuiz, postAnswer, selectAnswer, setMessage} from '../state/action-c
  }
 
 const mapStateToProps = state => {
-  console.log("12",state.selectedAnswer)
   return {
     quiz: state.quiz,
     selectedAnswer: state.selectedAnswer,

@@ -2,13 +2,13 @@ import React from 'react'
 import {connect} from 'react-redux';
 
  const Message = (props) => {
-  return <div id="message">{props.message}</div>
+  return <div id="message">{props.message.message}</div>
 }
 
 const mapStateToProps = state => {
-  console.log(state.message)
+  console.log(state.infoMessage)
   return {
-    message: state.message
+    message: state.infoMessage
   }
 }
 

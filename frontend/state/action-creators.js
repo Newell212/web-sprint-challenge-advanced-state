@@ -30,6 +30,7 @@ export function fetchQuiz() {
     .then(res => {
       dispatch(setQuiz(null))
       dispatch(setQuiz(res.data))
+      dispatch(setMessage(''));
     })
     .catch(console.log("error"))
     
@@ -43,21 +44,18 @@ export function postAnswer(quiz_id, selectedAnswer) {
     
     let data = {
       quiz_id: quiz_id, 
-      answer_id: selectedAnswer.answer_id 
+      answer_id: selectedAnswer.selectedAnswer 
     }
-    console.log("post",data)
-    dispatch(fetchQuiz())
-    // axios.post('http://localhost:9000/api/quiz/answer', data, {
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // })
-    // .then(res => {
-    //   console.log(res)
-    //  dispatch(selectAnswer(null))
-    //  dispatch(setQuiz(null))
-     
-    // })
+    axios.post('http://localhost:9000/api/quiz/answer', data, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(res => {
+     dispatch(selectAnswer(null))
+     dispatch(setMessage(res.data.message))
+     dispatch(fetchQuiz())
+    })
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
