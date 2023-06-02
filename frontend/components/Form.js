@@ -1,26 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { connect } from 'react-redux'
 import * as actionCreators from '../state/action-creators'
+import {postQuiz, inputChange} from '../state/action-creators';
 
-export function Form(props) {
-  
-function testState() {
-  console.log('7', newQuestion)
-  console.log('8', newTrueAnswer)
-  console.log('9', newFalseAnswer)
-  console.log('10', submitNewQuizBtn)
-  
-}
+export const Form = (props) => {
+  const [disable, setDisable] = useState(true)
 
   const onChange = evt => {
-    if(newQuestion === '') {
-      console.log("it's working")
-    }
+    evt.preventDefault();
+    console.log("evt",evt.target.id)
+    console.log("12", props.newQuestion)
+
+   if(evt.target.id === 'newQuestion') {
+   
+   
+      
+    props.inputChange(evt.target.value)
+    
+    
+   } else if (evt.target.id === 'newTrueAnswer') {
+    
+    props.inputChange(evt.target.value)
+   } else {
+    props.inputChange(evt.target.value)
+   }
   }
 
   const onSubmit = evt => {
     evt.preventDefault();
-    
+    postQuiz()
   }
 
   return (
@@ -29,16 +37,18 @@ function testState() {
       <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" />
       <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" />
       <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn" onClick={testState}>Submit new quiz</button>
+      <button id="submitNewQuizBtn" onClick={onSubmit} disabled={disable}>Submit new quiz</button>
     </form>
   )
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     newQuestion: state.newQuestion,
+const mapStateToProps = state => {
+  console.log("1",state.form.newQuestion)
+  return {
+    newQuestion: state.form.newQuestion,
+    newTrueAnswer: state.form.newTrueAnswer,
+    newFalseAnswer: state.form.newFalseAnswer
+  }
+}
 
-//   }
-// }
-
-export default connect(st => st, actionCreators)(Form)
+export default connect(mapStateToProps, {postQuiz, inputChange})(Form)

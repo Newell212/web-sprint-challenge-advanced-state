@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 }
 
 const mapStateToProps = state => {
-  console.log(state.infoMessage)
   return {
     message: state.infoMessage
   }

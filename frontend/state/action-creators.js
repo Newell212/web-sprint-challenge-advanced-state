@@ -1,16 +1,11 @@
 // ❗ You don't need to add extra action creators to achieve MVP
-import {MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, SET_QUIZ_INTO_STATE, SET_INFO_MESSAGE, SET_SELECTED_ANSWER} from './action-types';
+import {MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, SET_QUIZ_INTO_STATE, SET_INFO_MESSAGE, SET_SELECTED_ANSWER, INPUT_CHANGE, RESET_FORM} from './action-types';
 import axios from 'axios';
 
-export const moveClockwise = wheel => (console.log(wheel),
+export const moveClockwise = wheel => (console.log("clockwise",wheel),
 {type: MOVE_CLOCKWISE, payload: wheel })
 
-export function moveCounterClockwise(wheel) { let newWheel =  + 1
-  console.log(newWheel);
-return ({
-  type: MOVE_COUNTERCLOCKWISE,
-  payload: newWheel
-}) }
+export const moveCounterClockwise = wheel => (console.log("counter",wheel),{type:MOVE_COUNTERCLOCKWISE, payload: wheel})
 
 export const selectAnswer = selectedAnswer => {return({type:SET_SELECTED_ANSWER, payload:selectedAnswer})}
 
@@ -18,9 +13,9 @@ export const setMessage = message =>  ({ type: SET_INFO_MESSAGE, payload: messag
 
 export const setQuiz = quiz => ({type: SET_QUIZ_INTO_STATE, payload: quiz })
 
-export function inputChange() { }
+export const inputChange = input => {console.log(input); return({type: INPUT_CHANGE, payload: input })}
 
-export function resetForm() { }
+export const resetForm = () => ({type: RESET_FORM })
 
 // ❗ Async action creators
 export function fetchQuiz() {
@@ -56,6 +51,9 @@ export function postAnswer(quiz_id, selectedAnswer) {
      dispatch(setMessage(res.data.message))
      dispatch(fetchQuiz())
     })
+    .catch(() => {
+      console.log("uh no not working")
+    })
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
@@ -64,6 +62,10 @@ export function postAnswer(quiz_id, selectedAnswer) {
 }
 export function postQuiz() {
   return function (dispatch) {
+    axios.post('http://localhost:9000/api/quiz/new') 
+    .then(res => {
+      console.log(res)
+    })
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form
