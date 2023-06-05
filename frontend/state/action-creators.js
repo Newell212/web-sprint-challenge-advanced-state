@@ -2,8 +2,7 @@
 import {MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, SET_QUIZ_INTO_STATE, SET_INFO_MESSAGE, SET_SELECTED_ANSWER, INPUT_CHANGE, RESET_FORM} from './action-types';
 import axios from 'axios';
 
-export const moveClockwise = wheel => (console.log("clockwise",wheel),
-{type: MOVE_CLOCKWISE, payload: wheel })
+export const moveClockwise = wheel => ({type:MOVE_CLOCKWISE, payload: wheel})
 
 export const moveCounterClockwise = wheel => (console.log("counter",wheel),{type:MOVE_COUNTERCLOCKWISE, payload: wheel})
 

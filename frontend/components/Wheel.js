@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {moveClockwise, moveCounterClockwise} from '../state/action-creators';
 
 const Wheel = (props) => {
-  const [index, setIndex] = useState(0)
+  const {wheel, moveClockwise, moveCounterClockwise} = props;
   const [classnameZero, setClassnameZero] = useState('cog active')
   const [classnameOne, setClassnameOne] = useState('cog')
   const [classnameTwo, setClassnameTwo] = useState('cog')
@@ -16,29 +16,48 @@ const Wheel = (props) => {
   const [letterThree, setLetterThree] = useState('')
   const [letterFour, setLetterFour] = useState('')
   const [letterFive, setLetterFive] = useState('')
+  const [index, setIndex] = useState(0);
 
-  let indexs = 0
-  let newIndexs = 0
-  const testIndex = () => {
-   
-    console.log('before',newIndexs)
-    newIndexs = newIndexs + 1
-    console.log('after',newIndexs)
-    console.log(indexs)
+  
+  
+  const newIndex = (evt) => {
+     changeStyle(evt.target.id);
+   if(evt.target.id === 'clockwiseBtn') {
+    console.log('index',index)
+    if((index) === 5) {
+      setIndex(0)
+       props.moveClockwise(0)
+    } else {
+      props.moveClockwise(props.wheel + 1)
+    }
+   } else if(evt.target.id === 'counterClockwiseBtn') {
+    if(props.wheel === 0) {
+       props.moveCounterClockwise(5)
+    } else {
+       props.moveCounterClockwise(props.wheel - 1)
+    }
+   }
+    
   }
 
   let idx = 0;
-  console.log('before', idx)
-  const newIndex = (evt) => {
-    console.log('wheel', props.wheel)
-    if(evt.target.id === "clockwiseBtn") {
-      console.log('target', evt.target.id)
-      idx = idx + 1
-      console.log('after',idx)
+  const changeStyle = (id) => {
+    console.log(idx)
+    if(id === 'clockwiseBtn' && index === 0) {
+      idx = props.wheel * 0
+    } else if(id === 'clockwiseBtn') {
+      idx = props.wheel + 1
+      console.log('ids', idx)
+      setIndex(idx + 1)
+    } else if(id === 'counterClockwiseBtn') {
+      idx = props.wheel - 1
+      setIndex(idx + 1)
     } else {
-      idx = idx
+      idx = props.wheel + 0
+      setIndex(idx + 1)
     }
-    
+
+
     if(idx === 0) {
       setClassnameZero('cog active')
       setClassnameOne('cog')
@@ -120,10 +139,12 @@ const Wheel = (props) => {
     }
   }
 
-  
+  useEffect(() => {
+    changeStyle()
+  },[]);
 
   return (
-    <div id="wrapper">
+    <div id="wrapper" > 
       <div id="wheel">
         <div className={classnameZero} style={{ "--i": 0 }}>{letterZero}</div>
         <div className={classnameOne} style={{ "--i": 1 }}>{letterOne}</div>
@@ -141,7 +162,6 @@ const Wheel = (props) => {
 }
 
 const mapStateToProps = state => {
-  console.log(state.wheel)
   return {
     wheel: state.wheel
   }
