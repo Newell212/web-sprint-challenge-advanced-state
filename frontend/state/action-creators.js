@@ -1,5 +1,5 @@
 // ❗ You don't need to add extra action creators to achieve MVP
-import {MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, SET_QUIZ_INTO_STATE, SET_INFO_MESSAGE, SET_SELECTED_ANSWER, INPUT_CHANGE, RESET_FORM} from './action-types';
+import {MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, SET_QUIZ_INTO_STATE, SET_INFO_MESSAGE, SET_SELECTED_ANSWER, INPUT_CHANGE, RESET_FORM, ADD_NEW_QUESTION, ADD_NEW_TRUE_ANSWER, ADD_NEW_FALSE_ANSWER} from './action-types';
 import axios from 'axios';
 
 export const moveClockwise = wheel => ({type:MOVE_CLOCKWISE, payload: wheel})
@@ -12,7 +12,11 @@ export const setMessage = message =>  ({ type: SET_INFO_MESSAGE, payload: messag
 
 export const setQuiz = quiz => ({type: SET_QUIZ_INTO_STATE, payload: quiz })
 
-export const inputChange = input => {console.log(input); return({type: INPUT_CHANGE, payload: input })}
+export const addNewQuestion = (form) => ({type: ADD_NEW_QUESTION, payload: form })
+
+export const addNewTrueAnswer = form => ({type: ADD_NEW_TRUE_ANSWER, payload: form})
+
+export const addNewFalseAnswer = form => ({type: ADD_NEW_FALSE_ANSWER, payload: form })
 
 export const resetForm = () => ({type: RESET_FORM })
 
@@ -59,11 +63,29 @@ export function postAnswer(quiz_id, selectedAnswer) {
     // - Dispatch the fetching of the next quiz
   }
 }
-export function postQuiz() {
+export function postQuiz(newQuestion, newTrueAnswer, newFalseAnswer) {
   return function (dispatch) {
-    axios.post('http://localhost:9000/api/quiz/new') 
+
+    let data = {
+      question_text: newQuestion,
+      true_answer_text: newTrueAnswer,
+      false_answer_text: newFalseAnswer
+    }
+
+    axios.post('http://localhost:9000/api/quiz/new', data, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
     .then(res => {
-      console.log(res)
+      console.log(res.data)
+      dispatch(setMessage(`Congrats: "${newQuestion}" is a great question!`))
+      dispatch(addNewQuestion(''))
+      dispatch(addNewTrueAnswer(''))
+      dispatch(addNewFalseAnswer(''))
+    })
+    .catch(() => {
+      console.log('no dice')
     })
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
