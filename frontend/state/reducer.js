@@ -57,14 +57,20 @@ const initialFormState = {
   newFalseAnswer: '',
 }
 function form(state = initialFormState, action) {
+  
+  console.log(`form reducer: ${action}`)
   switch(action.type) {
     case ADD_NEW_TRUE_ANSWER:
+      console.log("TRUE")
       return {...state, newTrueAnswer: action.payload}
     case ADD_NEW_FALSE_ANSWER:
+      console.log("FALSE")
       return {...state, newFalseAnswer: action.payload}
     case ADD_NEW_QUESTION:
+      console.log("NEW")
       return {...state, newQuestion: action.payload}
     case RESET_FORM:
+      console.log("RESET")
       return {initialFormState}
     default:
       return state

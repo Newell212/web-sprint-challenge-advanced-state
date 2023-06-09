@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const moveClockwise = wheel => ({type:MOVE_CLOCKWISE, payload: wheel})
 
-export const moveCounterClockwise = wheel => (console.log("counter",wheel),{type:MOVE_COUNTERCLOCKWISE, payload: wheel})
+export const moveCounterClockwise = wheel => ({type:MOVE_COUNTERCLOCKWISE, payload: wheel})
 
 export const selectAnswer = selectedAnswer => {return({type:SET_SELECTED_ANSWER, payload:selectedAnswer})}
 
@@ -28,7 +28,6 @@ export function fetchQuiz() {
     .then(res => {
       dispatch(setQuiz(null))
       dispatch(setQuiz(res.data))
-      dispatch(setMessage(''));
     })
     .catch(console.log("error"))
     
